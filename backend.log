@@ -1,43 +1,0 @@
-/home/zhaohuanzhe/miniconda3/envs/env_rag/lib/python3.12/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
-  import pkg_resources
-🚀 正在启动后台服务并预热 RAG 引擎...
-🧠 正在加载本地 BGE 向量模型...
-Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 45424.84it/s]
-🚀 正在启动后台服务并预热 RAG 引擎...
-🧠 正在加载本地 BGE 向量模型...
-Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 30000.97it/s]
-INFO:     Started server process [1765788]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     Uvicorn running on http://0.0.0.0:8451 (Press CTRL+C to quit)
-INFO:     127.0.0.1:42896 - "GET /api/v1/manuals HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45624 - "GET /api/v1/manuals HTTP/1.1" 200 OK
-/home/zhaohuanzhe/Car-Manual-RAG/backend/core/engine.py:97: LangChainDeprecationWarning: The class `Chroma` was deprecated in LangChain 0.2.9 and will be removed in 1.0. An updated version of the class exists in the `langchain-chroma package and should be used instead. To use it run `pip install -U `langchain-chroma` and import as `from `langchain_chroma import Chroma``.
-  self.active_db = Chroma(persist_directory=db_path, embedding_function=self.embeddings)
-⚙️ 正在加载 Reranker 重排模型到 GPU...
-Loading weights:   0%|          | 0/393 [00:00<?, ?it/s]Loading weights: 100%|██████████| 393/393 [00:00<00:00, 11060.75it/s]
-Building prefix dict from the default dictionary ...
-Loading model from cache /tmp/jieba.cache
-Loading model cost 0.714 seconds.
-Prefix dict has been built successfully.
-📦 正在从 Chroma 提取知识库切片，构建 BM25 词频索引...
-✅ 多路召回引擎初始化完成！(共挂载 487 个知识切片)
-⏱️ 混合检索耗时: 0.453 秒
-INFO:     127.0.0.1:45628 - "POST /api/v1/chat HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51494 - "GET /api/v1/manuals HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55104 - "GET /api/v1/manuals HTTP/1.1" 200 OK
-⏳ 正在解析并构建知识库: 汉...
-✅ 知识库构建完成！
-INFO:     127.0.0.1:55106 - "POST /api/v1/upload HTTP/1.1" 200 OK
-INFO:     127.0.0.1:38686 - "GET /api/v1/manuals HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49650 - "GET /api/v1/manuals HTTP/1.1" 200 OK
-⚙️ 正在加载 Reranker 重排模型到 GPU...
-Loading weights:   0%|          | 0/393 [00:00<?, ?it/s]Loading weights: 100%|██████████| 393/393 [00:00<00:00, 10895.95it/s]
-📦 正在从 Chroma 提取知识库切片，构建 BM25 词频索引...
-✅ 多路召回引擎初始化完成！(共挂载 323 个知识切片)
-⏱️ 混合检索耗时: 0.280 秒
-INFO:     127.0.0.1:49654 - "POST /api/v1/chat HTTP/1.1" 200 OK
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [1765788]
