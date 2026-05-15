@@ -39,54 +39,44 @@
 ## 项目架构
 
 ```mermaid
-graph LR
-    %% 样式定义
-    classDef ui fill:#E1F5FE,stroke:#0288D1,stroke-width:2px,color:#000;
-    classDef api fill:#E8F5E9,stroke:#388E3C,stroke-width:2px,color:#000;
-    classDef rag fill:#FFF3E0,stroke:#F57C00,stroke-width:2px,color:#000;
-    classDef db fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px,color:#000;
-    classDef external fill:#ECEFF1,stroke:#607D8B,stroke-width:2px,color:#000;
+graph TD
+    %% 样式定义：统一采用简洁的灰蓝色系，符合学术审美
+    classDef layer fill:#f9f9f9,stroke:#333,stroke-width:2px,font-weight:bold;
+    classDef component fill:#fff,stroke:#666,stroke-width:1px;
+    classDef storage fill:#fff,stroke:#333,stroke-width:2px,stroke-dasharray: 5 5;
 
-    User((🚗 车主用户))
-
-    subgraph 交互层
-        UI[Streamlit 响应式前端]:::ui
+    %% 1. 接口层 (Interface Layer)
+    subgraph Layer_UI [Application Interface]
+        direction LR
+        UI[Streamlit Frontend]:::component --- API[FastAPI Gateway]:::component
     end
 
-    subgraph 服务层
-        API[FastAPI 异步微服务]:::api
+    %% 2. 逻辑层 (RAG Pipeline Layer)
+    subgraph Layer_RAG [RAG Core Pipeline]
+        direction TB
+        Rewriter[Query Rewriter]:::component --> Hybrid[Hybrid Retriever]:::component
+        Hybrid --> Reranker[Cross-Encoder Reranker]:::component
+        Reranker --> Generator[Response Generator]:::component
     end
 
-    subgraph RAG 引擎核心流水线
-        Rewrite[1. 意图改写模块]:::rag
-        Recall[2. 多路混合召回<br/>BM25 + 语义空间]:::rag
-        Reranker[3. Cross-Encoder<br/>深度重排打分]:::rag
-        Generator[4. 全局约束生成<br/>防幻觉拦截]:::rag
+    %% 3. 基础层 (Infrastructure Layer)
+    subgraph Layer_Data [Knowledge & Models]
+        direction LR
+        DB[(Chroma DB)]:::storage
+        LLM[GLM-4 / BGE Models]:::storage
     end
 
-    subgraph 数据与外部依赖
-        Chroma[(Chroma DB<br/>本地向量库)]:::db
-        GLM[智谱 GLM-4-Flash]:::external
-        BGE[本地 BGE 模型矩阵]:::external
-    end
-
-    %% 请求链路 (已修复为 GitHub 兼容语法)
-    User -->|提问 / 上传手册| UI
-    UI -->|HTTP POST| API
+    %% 全局数据流向
+    API ==> Rewriter
+    Generator ==> API
     
-    API --> Rewrite
-    Rewrite -.->|补全语境| GLM
-    Rewrite -->|优化后查询词| Recall
-    Recall -.->|特征提取| BGE
-    Recall <-->|检索匹配的 Chunk切片| Chroma
-    Recall -->|Top 10 粗排文档| Reranker
-    Reranker -.->|交叉注意力计算| BGE
-    Reranker -->|Top 3 精排上下文| Generator
-    Generator -.->|注入系统级 Prompt| GLM
-    Generator -->|严谨的生成回答| API
-    
-    API -->|携带检索细节的 JSON| UI
-    UI -->|渲染折叠面板| User
+    %% 组件与底层的交互 (解耦表示)
+    Rewriter -.-> LLM
+    Hybrid <--> DB
+    Reranker -.-> LLM
+    Generator -.-> LLM
+
+    class Layer_UI,Layer_RAG,Layer_Data layer;
 ```
 
 
