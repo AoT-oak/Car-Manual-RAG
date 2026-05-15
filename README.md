@@ -70,23 +70,23 @@ graph LR
         BGE[本地 BGE 模型矩阵]:::external
     end
 
-    %% 请求链路
-    User -- 提问 / 上传手册 --> UI
-    UI -- HTTP POST --> API
+    %% 请求链路 (已修复为 GitHub 兼容语法)
+    User -->|提问 / 上传手册| UI
+    UI -->|HTTP POST| API
     
     API --> Rewrite
-    Rewrite -. 补全语境 .-> GLM
-    Rewrite -- 优化后查询词 --> Recall
-    Recall -. 特征提取 .-> BGE
-    Recall <--> 检索匹配的 Chunk切片 --> Chroma
-    Recall -- Top 10 粗排文档 --> Reranker
-    Reranker -. 交叉注意力计算 .-> BGE
-    Reranker -- Top 3 精排上下文 --> Generator
-    Generator -. 注入系统级 Prompt .-> GLM
-    Generator -- 严谨的生成回答 --> API
+    Rewrite -.->|补全语境| GLM
+    Rewrite -->|优化后查询词| Recall
+    Recall -.->|特征提取| BGE
+    Recall <-->|检索匹配的 Chunk切片| Chroma
+    Recall -->|Top 10 粗排文档| Reranker
+    Reranker -.->|交叉注意力计算| BGE
+    Reranker -->|Top 3 精排上下文| Generator
+    Generator -.->|注入系统级 Prompt| GLM
+    Generator -->|严谨的生成回答| API
     
-    API -- 携带检索细节的 JSON --> UI
-    UI -- 渲染折叠面板 --> User
+    API -->|携带检索细节的 JSON| UI
+    UI -->|渲染折叠面板| User
 ```
 
 
